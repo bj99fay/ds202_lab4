@@ -1,0 +1,11 @@
+---
+title: "individual2.Rmd"
+author: 'Chase Weida; Github: cweida'
+date: "3/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
