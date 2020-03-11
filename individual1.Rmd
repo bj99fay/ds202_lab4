@@ -1,0 +1,32 @@
+---
+title: "individual1.Rmd"
+author: "Bernard Fay"
+date: "3/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readxl)
+```
+
+```{r}
+offense <- read_excel('cyclonesFootball2019.xlsx', sheet='Offensive')
+offense %>% head()
+
+offense$Name <- as.factor(offense$Name)
+offense$Opponent_Opponent <- as.factor(offense$Opponent_Opponent)
+offense$Rushing_ATT <- as.numeric(offense$Rushing_ATT)
+offense$Rushing_YDS <- as.numeric(offense$Rushing_YDS)
+offense$Rushing_TD <- as.numeric(offense$Rushing_TD)
+offense$Receiving_REC <- as.numeric(offense$Receiving_REC)
+offense$Receiving_YDS <- as.numeric(offense$Receiving_YDS)
+offense$Receiving_TD <- as.numeric(offense$Receiving_TD)
+offense$Passing_YDS <- as.numeric(offense$Passing_YDS)
+offense$Passing_TD <- as.numeric(offense$Passing_TD)
+offense$Passing_INT <- as.numeric(offense$Passing_INT)
+offense %>% separate(9, into=c("Passing_CMP", "Passing_ATT"), sep="([-\r\n ]+[[:space:]])")
+
+offense
+```
