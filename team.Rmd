@@ -1,0 +1,11 @@
+---
+title: "team.Rmd"
+author: 'Chase Weida; Github: cweida; Bernard Fay; Github: bj99fay'
+date: "3/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
