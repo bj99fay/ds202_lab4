@@ -17,16 +17,8 @@ offense %>% head()
 
 offense$Name <- as.factor(offense$Name)
 offense$Opponent_Opponent <- as.factor(offense$Opponent_Opponent)
-offense$Rushing_ATT <- as.numeric(offense$Rushing_ATT)
-offense$Rushing_YDS <- as.numeric(offense$Rushing_YDS)
-offense$Rushing_TD <- as.numeric(offense$Rushing_TD)
-offense$Receiving_REC <- as.numeric(offense$Receiving_REC)
-offense$Receiving_YDS <- as.numeric(offense$Receiving_YDS)
-offense$Receiving_TD <- as.numeric(offense$Receiving_TD)
-offense$Passing_YDS <- as.numeric(offense$Passing_YDS)
-offense$Passing_TD <- as.numeric(offense$Passing_TD)
-offense$Passing_INT <- as.numeric(offense$Passing_INT)
-offense %>% separate(9, into=c("Passing_CMP", "Passing_ATT"), sep="([-\r\n ]+[[:space:]])")
+offense <-separate(offense, "Passing_CMP-ATT", into=c("Passing_CMP", "Passing_ATT"), sep="-\r\n ")
+offense <- mutate_at(offense, .vars=c(3:13), .funs=funs(as.numeric))
 
-offense
+offClean <- offense
 ```
