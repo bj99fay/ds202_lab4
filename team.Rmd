@@ -7,6 +7,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(tidyverse)
 ```
 
 ## Cleaning
@@ -21,6 +23,7 @@ defense$Opponent_Opponent <- as.factor(defense$Opponent_Opponent)
 
 defense <- defense %>% mutate_at(.vars=c(3:11), .funs= list(as.numeric))
 defClean <- defense
+str(defClean)
 
 #offense
 offense <- read_excel('cyclonesFootball2019.xlsx', sheet='Offensive')
@@ -32,6 +35,7 @@ offense <-separate(offense, "Passing_CMP-ATT", into=c("Passing_CMP", "Passing_AT
 offense <- mutate_at(offense, .vars=c(3:13), .funs=funs(as.numeric))
 
 offClean <- offense
+str(offClean)
 
 #biography
 
@@ -44,6 +48,28 @@ biography$inch <- as.numeric(biography$inch)
 
 biography$Height <- biography %>% transmute(inches = (Ft * 12) + inch)
 biography <- biography %>% select(-c(3,4))
-biography <- biography %>% mutate_at(.vars = c(1,2,4,5,6), .funs = funs(as.factor)) %>% mutate_at(.vars = c(3), .funs = funs(as.numeric))
+biography <- biography %>% mutate_at(.vars = c(1,2,4,5,6), .funs = list(as.factor)) %>% mutate_at(.vars = c(3), .funs = funs(as.numeric))
 bioClean <- biography
+str(bioClean)
+```
+
+## Tidying(1)
+### 1.
+```{r}
+dat1 <- defClean %>% pivot_longer(cols=c(3:11), names_to="Statistic")
+```
+
+### 2.
+```{r}
+dat1 %>% ggplot(aes(x=as.numeric(value))) + geom_bar(stat="count") + facet_wrap(~Statistic) + xlab("value")
+```
+
+YoU nEeD tO pRoViDe An AnSwEr HeRe!!!!
+
+### 3.
+```{r}
+dat2 <- dat1 %>%
+        filter(Opponent_Opponent == c("Kansas State", "West Virginia") && Statistic == Tackles_Solo) %>%
+        select(Opponent_Opponent, Statistic)
+dat2
 ```
