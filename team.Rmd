@@ -64,12 +64,47 @@ dat1 <- defClean %>% pivot_longer(cols=c(3:11), names_to="Statistic")
 dat1 %>% ggplot(aes(x=as.numeric(value))) + geom_bar(stat="count") + facet_wrap(~Statistic) + xlab("value")
 ```
 
-YoU nEeD tO pRoViDe An AnSwEr HeRe!!!!
+There are several defensive skills that are rare. Pass_PB, Pass_QBH, Tackles_Sack, Tackles_TFL, Turnover_FF, Turnover_FR, and Turnover_INT are the rare defensive skills because very few players have non-zero values in these areas.
 
 ### 3.
 ```{r}
 dat2 <- dat1 %>%
-        filter(Opponent_Opponent == c("Kansas State", "West Virginia") && Statistic == Tackles_Solo) %>%
-        select(Opponent_Opponent, Statistic)
-dat2
+        filter(Opponent_Opponent == c("Kansas State", "West Virginia") & Statistic == "Tackles_Solo") %>%
+        select(Name, Opponent_Opponent, value) %>%
+        pivot_wider(id_cols = c(1:2), names_from = Opponent_Opponent, values_from = value)
+dat2$`West Virginia`[is.na(dat2$`West Virginia`)] <- 0
+dat2$`Kansas State`[is.na(dat2$`Kansas State`)] <- 0
+dat2 %>% ggplot(aes(x=`West Virginia`, y=`Kansas State`)) + geom_point()
+```
+
+## Tidying (2)
+### 1
+```{r}
+
+```
+
+### 2
+```{r}
+
+```
+
+## Joining
+### 1
+```{r}
+
+```
+
+### 2
+```{r}
+
+```
+
+### 3
+```{r}
+
+```
+
+### 4
+```{r}
+
 ```

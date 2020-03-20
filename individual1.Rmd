@@ -28,7 +28,4 @@ dat1 <- defClean %>% pivot_longer(cols=c(3:11), names_to="Statistic")
 dat1 %>% ggplot(aes(x=as.numeric(value))) + geom_bar(stat="count") + facet_wrap(~Statistic) + xlab("value")
 dat2 <- dat1 %>%
         filter(Opponent_Opponent == c("Kansas State", "West Virginia") & Statistic == "Tackles_Solo")
-dat2 %>% head()
-
-dat2 %>% ggplot(aes())
 ```
