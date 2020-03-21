@@ -14,9 +14,7 @@ library(tidyverse)
 ## Cleaning
 ```{r}
 #defense
-
 defense <- read_excel('cyclonesFootball2019.xlsx', sheet='Defensive')
-head(defense)
 defense <- data.frame(defense)
 defense$Name <- as.factor(defense$Name)
 defense$Opponent_Opponent <- as.factor(defense$Opponent_Opponent)
@@ -27,8 +25,6 @@ str(defClean)
 
 #offense
 offense <- read_excel('cyclonesFootball2019.xlsx', sheet='Offensive')
-offense %>% head()
-
 offense$Name <- as.factor(offense$Name)
 offense$Opponent_Opponent <- as.factor(offense$Opponent_Opponent)
 offense <-separate(offense, "Passing_CMP-ATT", into=c("Passing_CMP", "Passing_ATT"), sep="-\r\n ")
@@ -38,7 +34,6 @@ offClean <- offense
 str(offClean)
 
 #biography
-
 biography <- read_excel('cyclonesFootball2019.xlsx', sheet='Biography')
 biography <- data.frame(biography)
 
@@ -48,7 +43,7 @@ biography$inch <- as.numeric(biography$inch)
 
 biography$Height <- biography %>% transmute(inches = (Ft * 12) + inch)
 biography <- biography %>% select(-c(3,4))
-biography <- biography %>% mutate_at(.vars = c(1,2,4,5,6), .funs = list(as.factor)) %>% mutate_at(.vars = c(3), .funs = funs(as.numeric))
+biography <- biography %>% mutate_at(.vars = c(1,2,4,5,6), .funs = list(as.factor)) %>% mutate_at(.vars = c(3), .funs = list(as.numeric))
 bioClean <- biography
 str(bioClean)
 ```
