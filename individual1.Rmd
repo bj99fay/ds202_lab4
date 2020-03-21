@@ -18,7 +18,7 @@ offense %>% head()
 offense$Name <- as.factor(offense$Name)
 offense$Opponent_Opponent <- as.factor(offense$Opponent_Opponent)
 offense <-separate(offense, "Passing_CMP-ATT", into=c("Passing_CMP", "Passing_ATT"), sep="-\r\n ")
-offense <- mutate_at(offense, .vars=c(3:13), .funs=funs(as.numeric))
+offense <- mutate_at(offense, .vars=c(3:13), .funs=list(as.numeric))
 
 offClean <- offense
 ```
