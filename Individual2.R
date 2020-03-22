@@ -32,4 +32,21 @@ biography
 biography %>% add_count(`Home State`, name = "Players in State") %>% select(`Home State`, `Players in State`) %>% distinct()
 
 
+#offense
+offense <- read_excel('cyclonesFootball2019.xlsx', sheet='Offensive')
+offense$Name <- as.factor(offense$Name)
+offense$Opponent_Opponent <- as.factor(offense$Opponent_Opponent)
+offense <-separate(offense, "Passing_CMP-ATT", into=c("Passing_CMP", "Passing_ATT"), sep="-\r\n ")
+offense <- mutate_at(offense, .vars=c(3:13), .funs=list(as.numeric))
+
+offClean <- offense
+str(offClean)
+offClean
+
+offJoin <- biography %>% inner_join(offClean, by = 'Name')
+
+library(ggplot2)
+ggplot(data = offJoin, mapping = aes(Weight, Receiving_YDS)) + geom_point() +geom_smooth(method = 'lm')
+
+
 

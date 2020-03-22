@@ -93,13 +93,17 @@ Here one can see that the players in the data set come from 19 total states. 35 
 ## Joining
 ### 1
 ```{r}
-
+offJoin <- biography %>% inner_join(offClean, by = 'Name')
+offJoin[,c('Name', "Home City", "Home State")] %>% distinct()
 ```
+
 
 ### 2
 ```{r}
-
+ggplot(data = offJoin, mapping = aes(Weight, Receiving_YDS)) + geom_point() +geom_smooth(method = 'lm', se = FALSE)
 ```
+
+As seen in the plot above, there does not exist a very strong relationship between the weight of the player and the receiving yards of the player. As the weight of the player increases the expected number of receiving yards neither increases nor decreases. 
 
 ### 3
 ```{r}
