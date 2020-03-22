@@ -80,7 +80,7 @@ Iowa State had better defense against Kansas State as there were several players
 ## Tidying (2)
 ### 1
 ```{r}
-biography <- biography %>% separate(Hometown, se = ", ", into = c("Home City", "Home State"))
+biography <- bioClean %>% separate(Hometown, se = ", ", into = c("Home City", "Home State"))
 biography[c(1:3),c("Home City", "Home State")]
 ```
 
@@ -107,10 +107,48 @@ As seen in the plot above, there does not exist a very strong relationship betwe
 
 ### 3
 ```{r}
+offDefJoin <- offClean %>% full_join(defClean, by = c("Name", "Opponent_Opponent"))
 
+purdy <- offDefJoin %>% filter(Name == "Purdy, Brock") %>% select(Opponent_Opponent, Passing_YDS, Rushing_YDS)
+
+columns <- c("Opponent_Opponent", "Receiving_YDS", "Rushing_YDS",
+             "Tackles_Sack", "Turnover_FR", "Turnover_INT")
+
+offDefJoin <- offDefJoin[,columns]
+offDefJoin <- offDefJoin %>% group_by(Opponent_Opponent) %>%
+                summarise(Receiving_YDS = sum(Receiving_YDS, na.rm = TRUE),
+                          Rushing_YDS   = sum(Rushing_YDS, na.rm = TRUE),
+                          Tackles_Sack  = sum(Tackles_Sack, na.rm = TRUE),
+                          Turnover_FR   = sum(Turnover_FR, na.rm = TRUE),
+                          Turnover_INT  = sum(Turnover_INT, na.rm = TRUE))
+offDefJoin <- offDefJoin %>% mutate(YDS = Receiving_YDS + Rushing_YDS) %>% 
+                             mutate(DEF = Tackles_Sack + Turnover_FR + Turnover_INT)
+
+offDefJoin$YDS <- offDefJoin$YDS/mean(offDefJoin$YDS)
+offDefJoin$DEF <- offDefJoin$DEF/mean(offDefJoin$DEF)
+offDefJoin <- offDefJoin %>% mutate(YDSplusDEF = (YDS + DEF)/2)
+
+purdy$Passing_YDS <- purdy$Passing_YDS/mean(purdy$Passing_YDS)
+purdy$Rushing_YDS <- purdy$Rushing_YDS/mean(purdy$Rushing_YDS)
+purdy <- purdy %>% mutate(YDS_Total = (Passing_YDS + Rushing_YDS)/2)
+
+purdy %>% ggplot(aes(x=Passing_YDS, y=offDefJoin$YDSplusDEF)) + geom_point() +geom_smooth(method = 'lm', se = FALSE) + xlab("Purdy Total YDS") + ylab("Team YDS + DEF")
 ```
+
+After standardizing the values (where 1 is average), there does not appear to be a correlation between Brock Purdy's performance and the team's overall perforamce. Purdy's performance was based on how many yards he passed and rushed for in a game. The team's performance was based on how many receiving and rushing yards, sacks, and turnovers forced the team had in a game.
+
 
 ### 4
+What state has the highest net turnovers (forced/recovered - given up)?
 ```{r}
+offDefJoin2 <- offClean %>% full_join(defClean, by = c("Name", "Opponent_Opponent"))
+allJoin <- biography %>% inner_join(offDefJoin2, by = "Name")
+allJoin <- allJoin[,c("Home State", "Passing_INT", "Turnover_FF", "Turnover_FR", "Turnover_INT")]
 
+allJoin[is.na(allJoin)] <- 0
+allJoin <- allJoin %>% group_by(`Home State`) %>% summarize_each(list(sum))
+allJoin <- allJoin %>% mutate(`Net Turnover` = Turnover_FF + Turnover_FR + Turnover_INT - Passing_INT)
+allJoin %>% ggplot(aes(x=`Home State`, y=`Net Turnover`)) + geom_bar(stat="identity") + coord_flip()
 ```
+
+Iowa had the highest net turnovers. However, the data set did not contain information on fumbles when rushing or receving. If this data was included, the results would likely be different because the only source of turnovers on offense are passing interceptions, which are all made by the Quaterback Brock Purdy.
