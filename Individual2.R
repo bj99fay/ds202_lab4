@@ -23,6 +23,13 @@ biography <- biography %>% select(-c(3,4))
 biography <- biography %>% mutate_at(.vars = c(1,2,4,5,6), .funs = funs(as.factor)) %>% mutate_at(.vars = c(3), .funs = funs(as.numeric))
 head(biography)
 
+colnames(biography)
+colnames(defense)
+biography$Hometown
+biography <- biography %>% separate(Hometown, se = ", ", into = c("Home City", "Home State"))
+biography
+
+biography %>% add_count(`Home State`, name = "Players in State") %>% select(`Home State`, `Players in State`) %>% distinct()
 
 
 

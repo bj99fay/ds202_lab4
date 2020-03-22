@@ -80,13 +80,15 @@ Iowa State had better defense against Kansas State as there were several players
 ## Tidying (2)
 ### 1
 ```{r}
-
+biography <- biography %>% separate(Hometown, se = ", ", into = c("Home City", "Home State"))
+biography[c(1:3),c("Home City", "Home State")]
 ```
 
 ### 2
 ```{r}
-
+biography %>% add_count(`Home State`, name = "Players in State") %>% select(`Home State`, `Players in State`) %>% distinct()
 ```
+Here one can see that the players in the data set come from 19 total states. 35 players come from Iowa while the next greatest number of players come from Florida. 
 
 ## Joining
 ### 1
