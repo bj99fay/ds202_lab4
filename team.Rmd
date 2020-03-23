@@ -65,7 +65,7 @@ There are several defensive skills that are rare. Pass_PB, Pass_QBH, Tackles_Sac
 ```{r}
 dat1 %>% head()
 dat2 <- dat1 %>%
-        filter(Opponent_Opponent == c("Kansas State", "West Virginia") & Statistic == "Tackles_Solo") %>%
+        filter(Opponent_Opponent %in% c("Kansas State", "West Virginia") & Statistic == "Tackles_Solo") %>%
         select(Name, Opponent_Opponent, value) %>%
         pivot_wider(names_from = Opponent_Opponent, values_from = value)
 dat2$`West Virginia`[is.na(dat2$`West Virginia`)] <- 0
@@ -75,7 +75,7 @@ dat2 %>% ggplot(aes(x=`West Virginia`, y=`Kansas State`)) + geom_point() +
         geom_text(aes(label=ifelse(`Kansas State`>2, as.character(Name),'')), hjust=0, vjust=0)
 ```
 
-Iowa State had better defense against Kansas State as there were several players with more than 2 tackles in that game, compared to only two players with >2 tackles in the West Virginia game.
+Iowa State had better defense against Kansas State as there were several players with more than 2 tackles in that game, compared to only five players with >2 tackles in the West Virginia game.
 
 ## Tidying (2)
 ### 1
